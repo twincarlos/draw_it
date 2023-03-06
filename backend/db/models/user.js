@@ -4,15 +4,27 @@ const bcrypt = require('bcryptjs');
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     username: {
-      type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      type: DataTypes.STRING
     },
     hashedPassword: {
-      type: DataTypes.STRING.BINARY,
-      allowNull: false
+      allowNull: false,
+      type: DataTypes.STRING.BINARY
     },
     profilePicture: {
-      type: DataTypes.STRING
+      allowNull: false,
+      type: DataTypes.STRING,
+      defaultValue: 'https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_1280.png'
+    },
+    gameId: {
+      type: DataTypes.INTEGER,
+      references: { model: 'Games' },
+      defaultValue: null
+    },
+    isHost: {
+      allowNull: false,
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   },
     {
@@ -32,8 +44,8 @@ module.exports = (sequelize, DataTypes) => {
     });
 
   User.prototype.toSafeObject = function () { // remember, this cannot be an arrow function
-    const { id, username, profilePicture } = this; // context will be the User instance
-    return { id, username, profilePicture };
+    const { id, username, profilePicture, gameId, isHost } = this; // context will be the User instance
+    return { id, username, profilePicture, gameId, isHost };
   };
 
   User.getCurrentUserById = async function (id) {
@@ -60,6 +72,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.associate = function (models) {
     // associations can be defined here
+    User.belongsTo(models.Game, { foreignKey: 'gameId' });
   };
 
   return User;

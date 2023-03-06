@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import './Navigation.css';
 import { useDispatch } from 'react-redux';
-import * as sessionActions from '../../store/session';
+import * as sessionActions from '../../store/thunks/user';
 
 function Navigation({ isLoaded }) {
   const dispatch = useDispatch();

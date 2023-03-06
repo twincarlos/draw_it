@@ -4,7 +4,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const { setTokenCookie } = require('../../utils/auth');
-const { User } = require('../../db/models');
+const { User, Game } = require('../../db/models');
 
 const router = express.Router();
 
@@ -34,9 +34,7 @@ router.post(
 
         await setTokenCookie(res, user);
 
-        return res.json({
-            user,
-        });
+        return res.json(user);
     }),
 );
 

@@ -1,77 +1,42 @@
-import { csrfFetch } from './csrf';
+import * as userThunks from './thunks/user';
+import * as gameThunks from './thunks/game';
 
-const SET_USER = 'session/setUser';
-const REMOVE_USER = 'session/removeUser';
-
-const setUser = (user) => {
-  return {
-    type: SET_USER,
-    payload: user,
-  };
-};
-
-const removeUser = () => {
-  return {
-    type: REMOVE_USER,
-  };
-};
-
-export const login = (user) => async (dispatch) => {
-  const { username, password } = user;
-  const response = await csrfFetch('/api/session', {
-    method: 'POST',
-    body: JSON.stringify({
-      username,
-      password,
-    }),
-  });
-  const data = await response.json();
-  dispatch(setUser(data.user));
-  return response;
-};
-
-export const restoreUser = () => async dispatch => {
-  const response = await csrfFetch('/api/session');
-  const data = await response.json();
-  dispatch(setUser(data.user));
-  return response;
-};
-
-export const signup = (user) => async (dispatch) => {
-  const { username, password } = user;
-  const response = await csrfFetch("/api/users", {
-    method: "POST",
-    body: JSON.stringify({
-      username,
-      password,
-    }),
-  });
-  const data = await response.json();
-  dispatch(setUser(data.user));
-  return response;
-};
-
-export const logout = () => async (dispatch) => {
-  const response = await csrfFetch('/api/session', {
-    method: 'DELETE',
-  });
-  dispatch(removeUser());
-  return response;
-};
-
-const initialState = { user: null };
+const initialState = { user: null, game: null };
 
 const sessionReducer = (state = initialState, action) => {
   let newState;
+
   switch (action.type) {
-    case SET_USER:
+    case userThunks.SET_USER:
       newState = Object.assign({}, state);
-      newState.user = action.payload;
+      newState.user = action.user;
       return newState;
-    case REMOVE_USER:
+    case userThunks.REMOVE_USER:
       newState = Object.assign({}, state);
       newState.user = null;
+      newState.game = null;
       return newState;
+
+    case gameThunks.GET_GAME:
+      newState = Object.assign({}, state);
+      newState.game = action.game;
+      return { ...newState };
+    case gameThunks.CREATE_GAME:
+      newState = Object.assign({}, state);
+      newState.game = action.game;
+      return { ...newState };
+    case gameThunks.JOIN_GAME:
+      newState = Object.assign({}, state);
+      newState.game = action.payload.game;
+      newState.user = action.payload.player;
+      return { ...newState };
+    case gameThunks.END_GAME:
+      newState = Object.assign({}, state);
+      newState.user.gameId = null;
+      newState.user.isHost = false;
+      newState.game = null;
+      return { ...newState };
+
     default:
       return state;
   }
