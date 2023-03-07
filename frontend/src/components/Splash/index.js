@@ -20,13 +20,12 @@ function Splash() {
 
     async function createGame() {
         await dispatch(gameActions.createNewGame())
-            .then(res => dispatch(gameActions.joinOneGameById({ userId: sessionUser.id, gameId: res.id })))
-            .then(() => <Redirect to='/game'/>);
+            .then(res => dispatch(gameActions.joinOneGameAsHost({ userId: sessionUser.id, gameId: res.id })))
     };
 
     async function joinGame() {
-        await dispatch(gameActions.joinOneGameByPin({ pin: gamePin, userId: sessionUser.id }))
-            .then(res => res.game ? <Redirect to='/game'/> : setError('Game not found.'));
+        await dispatch(gameActions.joinOneGameAsGuest({ pin: gamePin, userId: sessionUser.id }))
+            .then(res => !(res.game) && setError('Game not found.'));
     };
 
     return (

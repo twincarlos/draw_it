@@ -4,37 +4,37 @@ import * as gameThunks from './thunks/game';
 const initialState = { user: null, game: null };
 
 const sessionReducer = (state = initialState, action) => {
-  let newState;
+  let newState = Object.assign({}, state);
 
   switch (action.type) {
     case userThunks.SET_USER:
-      newState = Object.assign({}, state);
       newState.user = action.user;
       return newState;
     case userThunks.REMOVE_USER:
-      newState = Object.assign({}, state);
       newState.user = null;
       newState.game = null;
       return newState;
 
     case gameThunks.GET_GAME:
-      newState = Object.assign({}, state);
       newState.game = action.game;
       return { ...newState };
     case gameThunks.CREATE_GAME:
-      newState = Object.assign({}, state);
       newState.game = action.game;
+      newState.game.Users = [];
       return { ...newState };
     case gameThunks.JOIN_GAME:
-      newState = Object.assign({}, state);
       newState.game = action.payload.game;
+      newState.game.Users = [ ...newState.game.Users, action.payload.player ];
       newState.user = action.payload.player;
       return { ...newState };
+    case gameThunks.KICK_OUT:
+      newState.game = action.payload;
+      return { ...newState };
+    case gameThunks.LEAVE_GAME:
     case gameThunks.END_GAME:
-      newState = Object.assign({}, state);
+      newState.game = null;
       newState.user.gameId = null;
       newState.user.isHost = false;
-      newState.game = null;
       return { ...newState };
 
     default:
