@@ -73,6 +73,8 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function (models) {
     // associations can be defined here
     User.belongsTo(models.Game, { foreignKey: 'gameId' });
+    User.hasMany(models.Prompt, { foreignKey: 'userId' });
+    User.hasMany(models.Task, { foreignKey: 'userId' });
   };
 
   return User;
