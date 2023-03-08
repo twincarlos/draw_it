@@ -35,17 +35,6 @@ router.put('/join-game', async (req, res) => {
     return res.json({ game, player });
 });
 
-// JOIN GAME AS HOST
-// router.put('/join-game-as-host', async (req, res) => {
-//     const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }, { model: Prompt }] });
-//     const player = await User.findByPk(req.body.userId);
-
-//     await player.update({ gameId: game.id, isHost: true });
-//     await player.save();
-
-//     return res.json({ player, game });
-// });
-
 // LEAVE GAME
 router.put('/leave-game', async (req, res) => {
     const player = await User.findByPk(req.body.userId);
