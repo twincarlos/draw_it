@@ -27,6 +27,10 @@ function Game() {
         dispatch(gameActions.kickPlayerOut({ userId, gameId: game.id }));
     };
 
+    async function startGame() {
+        dispatch(gameActions.startOneGame(game.id));
+    };
+
     return (
         <div className='main game'>
             {
@@ -46,7 +50,7 @@ function Game() {
                     ))
                 }
             </div>
-            { sessionUser.isHost && <button>Start Game</button> }
+            { sessionUser.isHost && <button onClick={startGame}>Start Game</button> }
         </div>
     );
 };

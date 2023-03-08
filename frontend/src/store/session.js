@@ -16,11 +16,12 @@ const sessionReducer = (state = initialState, action) => {
       return newState;
 
     case gameThunks.GET_GAME:
+    case gameThunks.START_GAME:
       newState.game = action.game;
       return { ...newState };
     case gameThunks.CREATE_GAME:
       newState.game = action.game;
-      newState.game.Users = [];
+      newState.user = action.game.Users[0];
       return { ...newState };
     case gameThunks.JOIN_GAME:
       newState.game = action.payload.game;

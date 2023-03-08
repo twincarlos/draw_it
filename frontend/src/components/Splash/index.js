@@ -19,12 +19,11 @@ function Splash() {
     };
 
     async function createGame() {
-        await dispatch(gameActions.createNewGame())
-            .then(res => dispatch(gameActions.joinOneGameAsHost({ userId: sessionUser.id, gameId: res.id })))
+        dispatch(gameActions.createNewGame(sessionUser.id))
     };
 
     async function joinGame() {
-        await dispatch(gameActions.joinOneGameAsGuest({ pin: gamePin, userId: sessionUser.id }))
+        await dispatch(gameActions.joinOneGame({ pin: gamePin, userId: sessionUser.id }))
             .then(res => !(res.game) && setError('Game not found.'));
     };
 

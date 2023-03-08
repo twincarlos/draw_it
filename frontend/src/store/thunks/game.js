@@ -6,6 +6,7 @@ export const JOIN_GAME = 'games/JOIN_GAME';
 export const LEAVE_GAME = 'games/LEAVE_GAME';
 export const KICK_OUT = 'games/KICK_OUT';
 export const END_GAME = 'games/END_GAME';
+export const START_GAME = 'games/START_GAME';
 
 const getGame = game => {
     return {
@@ -41,50 +42,57 @@ const endGame = () => {
         type: END_GAME
     };
 };
+const startGame = game => {
+    return {
+        type: START_GAME,
+        game
+    }
+};
 
 export const getOneGame = gameId => async dispatch => {
     const res = await csrfFetch(`/api/games/${gameId}`);
-    const data = await res.json();
-    dispatch(getGame(data));
-    return data;
+    const game = await res.json();
+    dispatch(getGame(game));
+    return game;
 };
-export const createNewGame = () => async dispatch => {
+export const createNewGame = userId => async dispatch => {
     const res = await csrfFetch('/api/games/new-game', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({ userId })
     });
-    const data = await res.json();
-    dispatch(createGame(data));
-    return data;
+    const game = await res.json();
+    dispatch(createGame(game));
+    return game;
 };
-export const joinOneGameAsGuest = data => async dispatch => {
-    const res = await csrfFetch('/api/games/join-game-as-guest', {
+export const joinOneGame = data => async dispatch => {
+    const res = await csrfFetch('/api/games/join-game', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
     });
-    const payload = await res.json();
-    if (payload.game) {
-        dispatch(joinGame(payload));
+    const game = await res.json();
+    if (game) {
+        dispatch(joinGame(game));
     };
-    return payload;
+    return game;
 };
-export const joinOneGameAsHost = data => async dispatch => {
-    const res = await csrfFetch('/api/games/join-game-as-host', {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    });
-    const payload = await res.json();
-    dispatch(joinGame(payload));
-    return payload;
-};
+// export const joinOneGameAsHost = data => async dispatch => {
+//     const res = await csrfFetch('/api/games/join-game-as-host', {
+//         method: 'PUT',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify(data)
+//     });
+//     const payload = await res.json();
+//     dispatch(joinGame(payload));
+//     return payload;
+// };
 export const leaveOneGame = userId => async dispatch => {
     await csrfFetch('/api/games/leave-game', {
         method: 'PUT',
@@ -113,4 +121,13 @@ export const endOneGame = gameId => async dispatch => {
         body: JSON.stringify({ gameId })
     })
         .then(dispatch(endGame()));
+};
+export const startOneGame = gameId => async dispatch => {
+    const res = await csrfFetch('/api/games/start-game', {
+        method: 'POST',
+        body: JSON.stringify({ gameId })
+    });
+    const game = await res.json();
+    dispatch(startGame(game));
+    return game;
 };
