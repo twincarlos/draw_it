@@ -5,7 +5,7 @@ const router = express.Router();
 
 // GET GAME
 router.get('/:gameId', async (req, res) => {
-    const game = await Game.findByPk(req.params.gameId, { include: [{ model: User }, { model: Prompt, include: { model: Task } }] });
+    const game = await Game.findByPk(req.params.gameId, { include: [{ model: User }, { model: Prompt, include: [{ model: Task, include: { model: User } }, { model: User }] }] });
     return res.json(game);
 });
 
@@ -24,15 +24,16 @@ router.post('/new-game', async (req, res) => {
 
 // JOIN GAME AS GUEST
 router.put('/join-game', async (req, res) => {
-    const game = await Game.findOne({ where: { pin: req.body.pin }, include: [{ model: User }] });
+    const game = await Game.findOne({ where: { pin: req.body.pin }, include: [{ model: User }, { model: Prompt, include: [{ model: Task, include: { model: User } }, { model: User }] }] });
     const player = await User.findByPk(req.body.userId);
 
-    if (game) {
+    if (game && game.stage === 'Lobby') {
         await player.update({ gameId: game.id });
         await player.save();
+        return res.json({ game, player });
     };
 
-    return res.json({ game, player });
+    return res.json({ game: null, player });
 });
 
 // LEAVE GAME
@@ -49,7 +50,7 @@ router.put('/kick-out', async (req, res) => {
     await player.update({ gameId: null });
     await player.save();
 
-    const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }] });
+    const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }, { model: Prompt, include: [{ model: Task, include: { model: User } }, { model: User }] }] });
     return res.json(game);
 });
 
@@ -73,7 +74,7 @@ router.post('/start-game', async (req, res) => {
         await Prompt.create({ gameId: player.gameId, userId: player.id });
     };
 
-    const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }] });
+    const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }, { model: Prompt, include: [{ model: Task, include: { model: User } }, { model: User }] }] });
     await game.update({ stage: 'Prompt' });
     await game.save();
 

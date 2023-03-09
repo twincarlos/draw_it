@@ -44,19 +44,24 @@ router.post('/submit-task', async (req, res) => {
     let stage = game.stage;
 
     if (taskCount === promptCount) {
-        switch(stage) {
-            case 'Prompt':
-            case 'Guess':
-                stage = 'Draw';
-                break;
-            case 'Draw':
-                stage = 'Guess'
-                break;
+        if (game.round === promptCount) {
+            stage = 'Final';
+        }
+        else {
+            switch(stage) {
+                case 'Prompt':
+                case 'Guess':
+                    stage = 'Draw';
+                    break;
+                case 'Draw':
+                    stage = 'Guess'
+                    break;
+            };
+            await game.increment({ round: 1 });
+            await game.save();
         };
 
         await game.update({ stage });
-        await game.save();
-        await game.increment({ round: 1 });
         await game.save();
     };
 
