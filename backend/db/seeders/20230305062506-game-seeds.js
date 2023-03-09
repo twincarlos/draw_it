@@ -11,8 +11,8 @@ module.exports = {
     return queryInterface.bulkInsert(options, [
       {
         pin: '1234',
-        stage: 'Draw',
-        round: 2
+        stage: 'Lobby',
+        round: 1
       },
     ], {});
   },

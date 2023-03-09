@@ -5,7 +5,7 @@ export default function Lobby({ game, sessionUser }) {
     const dispatch = useDispatch();
 
     function endGame() {
-        dispatch(gameActions.endOneGame(game.id));
+        dispatch(gameActions.endOneGame({ gameId: game.id, userId: sessionUser.id }));
     };
 
     function leaveGame() {
@@ -17,7 +17,7 @@ export default function Lobby({ game, sessionUser }) {
     };
 
     async function startGame() {
-        dispatch(gameActions.startOneGame(game.id));
+        dispatch(gameActions.startOneGame({ gameId: game.id, userId: sessionUser.id }));
     };
 
     return (
@@ -27,7 +27,7 @@ export default function Lobby({ game, sessionUser }) {
                 <button onClick={endGame}>End Game</button> :
                 <button onClick={leaveGame}>Leave Game</button>
             }
-            <h1>Game {game.id}</h1>
+            <h1>Game {game.pin}</h1>
             <div style={{ display: 'flex', gap: 50 }}>
                 {
                     game.Users.map(user => (

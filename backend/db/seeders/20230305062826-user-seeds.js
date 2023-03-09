@@ -29,21 +29,21 @@ module.exports = {
         username: 'Demo3',
         hashedPassword: bcrypt.hashSync('password'),
         profilePicture: 'https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_1280.png',
-        gameId: 1,
+        gameId: null,
         isHost: false
       },
       {
         username: 'Demo4',
         hashedPassword: bcrypt.hashSync('password'),
         profilePicture: 'https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_1280.png',
-        gameId: 1,
+        gameId: null,
         isHost: false
       },
       {
         username: 'Demo5',
         hashedPassword: bcrypt.hashSync('password'),
         profilePicture: 'https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_1280.png',
-        gameId: 1,
+        gameId: null,
         isHost: false
       },
     ], {});

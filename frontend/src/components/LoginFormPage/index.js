@@ -22,8 +22,8 @@ function LoginFormPage() {
     dispatch(sessionActions.login({ username, password }))
       .then(user => {
         if (user.gameId) {
-          dispatch(gameActions.getOneGame(user.gameId))
-            .then(game => dispatch(taskActions.getOneTask({ gameId: game.id, userId: user.id, round: game.round })));
+          dispatch(gameActions.getOneGame({ gameId: user.gameId, userId: user.id }))
+            .then(game => (game && (game.stage !== 'Final')) && dispatch(taskActions.getOneTask({ gameId: game.id, userId: user.id, round: game.round })));
         };
       })
       .catch(async (res) => {

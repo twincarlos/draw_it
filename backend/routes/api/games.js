@@ -1,11 +1,22 @@
 const express = require('express');
 const { Game, User, Prompt, Task } = require('../../db/models');
+const io = require('socket.io')(8080, {
+    cors: {
+        origin: ['http://localhost:3000']
+    }
+});
 
 const router = express.Router();
 
 // GET GAME
-router.get('/:gameId', async (req, res) => {
+router.get('/:gameId/:userId', async (req, res) => {
     const game = await Game.findByPk(req.params.gameId, { include: [{ model: User }, { model: Prompt, include: [{ model: Task, include: { model: User } }, { model: User }] }] });
+    const player = await User.findByPk(req.params.userId);
+
+    if (!player.gameId) {
+        return res.json(null);
+    };
+
     return res.json(game);
 });
 
@@ -30,6 +41,9 @@ router.put('/join-game', async (req, res) => {
     if (game && game.stage === 'Lobby') {
         await player.update({ gameId: game.id });
         await player.save();
+
+        io.emit('game-update', game.id);
+
         return res.json({ game, player });
     };
 
@@ -39,9 +53,12 @@ router.put('/join-game', async (req, res) => {
 // LEAVE GAME
 router.put('/leave-game', async (req, res) => {
     const player = await User.findByPk(req.body.userId);
+    const gameId = player.gameId;
 
     await player.update({ gameId: null });
     await player.save();
+
+    io.emit('game-update', gameId);
 });
 
 // KICK PLAYER OUT
@@ -51,6 +68,9 @@ router.put('/kick-out', async (req, res) => {
     await player.save();
 
     const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }, { model: Prompt, include: [{ model: Task, include: { model: User } }, { model: User }] }] });
+
+    io.emit('game-update', game.id);
+    io.emit('kick-out', req.body.userId);
     return res.json(game);
 });
 
@@ -64,6 +84,7 @@ router.delete('/end-game', async (req, res) => {
     };
 
     await game.destroy();
+    io.emit('game-update', req.body.gameId);
 });
 
 // START GAME
@@ -77,6 +98,8 @@ router.post('/start-game', async (req, res) => {
     const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }, { model: Prompt, include: [{ model: Task, include: { model: User } }, { model: User }] }] });
     await game.update({ stage: 'Prompt' });
     await game.save();
+
+    io.emit('game-update', req.body.gameId);
 
     return res.json(game);
 });

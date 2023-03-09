@@ -9,6 +9,7 @@ import * as taskActions from "./store/thunks/task";
 import Navigation from "./components/Navigation";
 import Splash from "./components/Splash";
 import Game from "./components/Game";
+import io from "socket.io-client";
 
 function App() {
   const dispatch = useDispatch();
@@ -16,13 +17,22 @@ function App() {
 
   useEffect(() => {
     dispatch(sessionActions.restoreUser())
-      .then(user => {
-        if (user && user.gameId) {
-          dispatch(gameActions.getOneGame(user.gameId))
-            .then(game => (game.stage !== 'Final') && dispatch(taskActions.getOneTask({ gameId: game.id, userId: user.id, round: game.round })));
-        };
-      })
-      .then(() => setIsLoaded(true));
+    .then(user => {
+      if (user && user.gameId) {
+        dispatch(gameActions.getOneGame({ gameId: user.gameId, userId: user.id }))
+          .then(game => (game && (game.stage !== 'Final')) && dispatch(taskActions.getOneTask({ gameId: game.id, userId: user.id, round: game.round })));
+      };
+    })
+    .then(() => setIsLoaded(true));
+
+    const socket = io('http://localhost:8080');
+    socket.on('game-update', gameId => {
+      dispatch(sessionActions.restoreUser())
+        .then(user => dispatch(gameActions.getOneGame({ gameId, userId: user.id })))
+    });
+    return () => {
+      socket.disconnect();
+    };
   }, [dispatch]);
 
   return (

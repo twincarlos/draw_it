@@ -49,8 +49,8 @@ const startGame = game => {
     }
 };
 
-export const getOneGame = gameId => async dispatch => {
-    const res = await csrfFetch(`/api/games/${gameId}`);
+export const getOneGame = data => async dispatch => {
+    const res = await csrfFetch(`/api/games/${data.gameId}/${data.userId}`);
     const game = await res.json();
     dispatch(getGame(game));
     return game;
@@ -103,17 +103,17 @@ export const kickPlayerOut = data => async dispatch => {
     dispatch(kickOut(game));
     return game;
 };
-export const endOneGame = gameId => async dispatch => {
+export const endOneGame = data => async dispatch => {
     await csrfFetch('/api/games/end-game', {
         method: 'DELETE',
-        body: JSON.stringify({ gameId })
+        body: JSON.stringify(data)
     })
         .then(dispatch(endGame()));
 };
-export const startOneGame = gameId => async dispatch => {
+export const startOneGame = data => async dispatch => {
     const res = await csrfFetch('/api/games/start-game', {
         method: 'POST',
-        body: JSON.stringify({ gameId })
+        body: JSON.stringify(data)
     });
     const game = await res.json();
     dispatch(startGame(game));
