@@ -45,6 +45,9 @@ const sessionReducer = (state = initialState, action) => {
       return { ...newState };
     case taskThunks.SUBMIT_TASK:
       newState.game = action.game;
+      if (action.game.stage === 'Final') {
+        newState.task = null;
+      };
       return { ...newState }
 
     default:

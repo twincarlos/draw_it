@@ -13,7 +13,8 @@ export default function Prompt({ sessionUser, game }) {
             task,
             type: 'Guess',
             round: 1
-        }));
+        }))
+        .then(newGame => (newGame.stage !== game.stage) && dispatch(taskActions.getOneTask({ gameId: game.id, userId: sessionUser.id, round: newGame.round })));
     };
 
     return (

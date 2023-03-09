@@ -17,7 +17,7 @@ export default function Guess({ sessionUser, game, task }) {
             type: 'Guess',
             round: game.round
         }))
-        .then(newGame => (newGame.round !== game.round) && dispatch(taskActions.getOneTask({ gameId: game.id, userId: sessionUser.id, round: newGame.round })));
+        .then(newGame => ((newGame.stage !== 'Final') && (newGame.stage !== game.stage)) && dispatch(taskActions.getOneTask({ gameId: game.id, userId: sessionUser.id, round: newGame.round })));
     };
 
     return (

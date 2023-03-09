@@ -19,7 +19,7 @@ function App() {
       .then(user => {
         if (user && user.gameId) {
           dispatch(gameActions.getOneGame(user.gameId))
-            .then(game => dispatch(taskActions.getOneTask({ gameId: game.id, userId: user.id, round: game.round })));
+            .then(game => (game.stage !== 'Final') && dispatch(taskActions.getOneTask({ gameId: game.id, userId: user.id, round: game.round })));
         };
       })
       .then(() => setIsLoaded(true));
