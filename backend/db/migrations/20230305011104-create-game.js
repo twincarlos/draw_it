@@ -24,6 +24,10 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue: 'Lobby'
       },
+      round: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

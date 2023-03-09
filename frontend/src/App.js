@@ -5,6 +5,7 @@ import LoginFormPage from "./components/LoginFormPage";
 import SignupFormPage from "./components/SignupFormPage";
 import * as sessionActions from "./store/thunks/user";
 import * as gameActions from "./store/thunks/game";
+import * as taskActions from "./store/thunks/task";
 import Navigation from "./components/Navigation";
 import Splash from "./components/Splash";
 import Game from "./components/Game";
@@ -15,8 +16,13 @@ function App() {
 
   useEffect(() => {
     dispatch(sessionActions.restoreUser())
-    .then(res => res && res.gameId && dispatch(gameActions.getOneGame(res.gameId)))
-    .then(() => setIsLoaded(true));
+      .then(user => {
+        if (user && user.gameId) {
+          dispatch(gameActions.getOneGame(user.gameId))
+            .then(game => dispatch(taskActions.getOneTask({ gameId: game.id, userId: user.id, round: game.round })));
+        };
+      })
+      .then(() => setIsLoaded(true));
   }, [dispatch]);
 
   return (

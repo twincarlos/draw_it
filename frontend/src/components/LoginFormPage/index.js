@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import * as sessionActions from '../../store/thunks/user';
 import * as gameActions from '../../store/thunks/game';
+import * as taskActions from '../../store/thunks/task';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
@@ -19,7 +20,12 @@ function LoginFormPage() {
     e.preventDefault();
     setErrors([]);
     dispatch(sessionActions.login({ username, password }))
-      .then(res => res.gameId && dispatch(gameActions.getOneGame(res.gameId)))
+      .then(user => {
+        if (user.gameId) {
+          dispatch(gameActions.getOneGame(user.gameId))
+            .then(game => dispatch(taskActions.getOneTask({ gameId: game.id, userId: user.id, round: game.round })));
+        };
+      })
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) setErrors(data.errors);

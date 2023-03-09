@@ -1,18 +1,18 @@
 const express = require('express');
-const { Game, User, Prompt } = require('../../db/models');
+const { Game, User, Prompt, Task } = require('../../db/models');
 
 const router = express.Router();
 
 // GET GAME
 router.get('/:gameId', async (req, res) => {
-    const game = await Game.findByPk(req.params.gameId, { include: [{ model: User }] });
+    const game = await Game.findByPk(req.params.gameId, { include: [{ model: User }, { model: Prompt, include: { model: Task } }] });
     return res.json(game);
 });
 
 // CREATE NEW GAME
 router.post('/new-game', async (req, res) => {
     const pin = Math.floor((Math.random() * 8999) + 1000); // Random number from 1000 to 9999
-    const game = await Game.create({ pin, stage: 'Lobby' });
+    const game = await Game.create({ pin, stage: 'Lobby', round: 1 });
 
     const player = await User.findByPk(req.body.userId);
     await player.update({ gameId: game.id, isHost: true });

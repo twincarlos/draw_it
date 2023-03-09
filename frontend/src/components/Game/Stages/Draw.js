@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import * as taskActions from "../../../store/thunks/task";
 
-export default function Guess({ sessionUser, game, task }) {
+export default function Draw({ sessionUser, game, task }) {
     const dispatch = useDispatch();
     const [newTask, setNewTask] = useState('');
 
@@ -14,16 +14,15 @@ export default function Guess({ sessionUser, game, task }) {
             gameId: game.id,
             userId: sessionUser.id,
             task: newTask,
-            type: 'Guess',
+            type: 'Draw',
             round: game.round
         }))
         .then(newGame => (newGame.round !== game.round) && dispatch(taskActions.getOneTask({ gameId: game.id, userId: sessionUser.id, round: newGame.round })));
     };
 
     return (
-        <div className="main guess">
-            <h1>Round {game.round}:</h1>
-            <h1>It's your turn to guess: {task.task}</h1>
+        <div className="main draw">
+            <h1>It's your turn to draw: {task.task}</h1>
             <input type='text' onChange={e => setNewTask(e.target.value)}></input>
             <button onClick={submitTask}>Submit</button>
         </div>

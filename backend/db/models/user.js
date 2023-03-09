@@ -31,7 +31,8 @@ module.exports = (sequelize, DataTypes) => {
       defaultScope: {
         attributes: {
           exclude: ['hashedPassword', 'createdAt', 'updatedAt']
-        }
+        },
+        order: [['id', 'ASC']]
       },
       scopes: {
         currentUser: {

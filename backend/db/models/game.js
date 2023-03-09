@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING(),
       defaultValue: 'Lobby'
+    },
+    round: {
+      allowNull: false,
+      type: DataTypes.INTEGER
     }
   }, {});
   Game.associate = function(models) {

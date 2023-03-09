@@ -11,7 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       references: { model: 'Users' }
     }
-  }, {});
+  }, {
+    defaultScope: {
+      order: [[ 'userId', 'ASC' ]]
+    }
+  });
   Prompt.associate = function(models) {
     // associations can be defined here
     Prompt.hasMany(models.Task, { foreignKey: 'promptId' });
