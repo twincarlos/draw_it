@@ -5,7 +5,7 @@ const router = express.Router();
 
 // GET GAME
 router.get('/:gameId', async (req, res) => {
-    const game = await Game.findByPk(req.params.gameId, { include: [{ model: User }, { model: Prompt }] });
+    const game = await Game.findByPk(req.params.gameId, { include: [{ model: User }] });
     return res.json(game);
 });
 
@@ -18,13 +18,13 @@ router.post('/new-game', async (req, res) => {
     await player.update({ gameId: game.id, isHost: true });
     await player.save();
 
-    const newGame = await Game.findByPk(game.id, { include: [{ model: User }, { model: Prompt }] });
+    const newGame = await Game.findByPk(game.id, { include: [{ model: User }] });
     return res.json(newGame);
 });
 
 // JOIN GAME AS GUEST
 router.put('/join-game', async (req, res) => {
-    const game = await Game.findOne({ where: { pin: req.body.pin }, include: [{ model: User }, { model: Prompt }] });
+    const game = await Game.findOne({ where: { pin: req.body.pin }, include: [{ model: User }] });
     const player = await User.findByPk(req.body.userId);
 
     if (game) {
@@ -49,13 +49,13 @@ router.put('/kick-out', async (req, res) => {
     await player.update({ gameId: null });
     await player.save();
 
-    const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }, { model: Prompt }] });
+    const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }] });
     return res.json(game);
 });
 
 // END GAME
 router.delete('/end-game', async (req, res) => {
-    const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }, { model: Prompt }] });
+    const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }] });
 
     for (let player of game.Users) {
         await player.update({ gameId: null, isHost: false });
@@ -73,7 +73,7 @@ router.post('/start-game', async (req, res) => {
         await Prompt.create({ gameId: player.gameId, userId: player.id });
     };
 
-    const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }, { model: Prompt }] });
+    const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }] });
     await game.update({ stage: 'Prompt' });
     await game.save();
 

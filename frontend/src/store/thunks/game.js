@@ -31,10 +31,10 @@ const leaveGame = () => {
         type: LEAVE_GAME
     };
 };
-const kickOut = payload => {
+const kickOut = game => {
     return {
         type: KICK_OUT,
-        payload
+        game
     };
 };
 const endGame = () => {
@@ -81,18 +81,6 @@ export const joinOneGame = data => async dispatch => {
     };
     return game;
 };
-// export const joinOneGameAsHost = data => async dispatch => {
-//     const res = await csrfFetch('/api/games/join-game-as-host', {
-//         method: 'PUT',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(data)
-//     });
-//     const payload = await res.json();
-//     dispatch(joinGame(payload));
-//     return payload;
-// };
 export const leaveOneGame = userId => async dispatch => {
     await csrfFetch('/api/games/leave-game', {
         method: 'PUT',
@@ -111,9 +99,9 @@ export const kickPlayerOut = data => async dispatch => {
         },
         body: JSON.stringify(data)
     });
-    const payload = await res.json();
-    dispatch(kickOut(payload));
-    return payload;
+    const game = await res.json();
+    dispatch(kickOut(game));
+    return game;
 };
 export const endOneGame = gameId => async dispatch => {
     await csrfFetch('/api/games/end-game', {

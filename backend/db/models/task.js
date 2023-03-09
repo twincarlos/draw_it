@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
     type: {
       allowNull: false,
       type: DataTypes.STRING
+    },
+    round: {
+      allowNull: false,
+      type: DataTypes.INTEGER
     }
   }, {});
   Task.associate = function(models) {

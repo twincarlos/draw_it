@@ -29,7 +29,7 @@ const sessionReducer = (state = initialState, action) => {
       newState.user = action.payload.player;
       return { ...newState };
     case gameThunks.KICK_OUT:
-      newState.game = action.payload;
+      newState.game = action.game;
       return { ...newState };
     case gameThunks.LEAVE_GAME:
     case gameThunks.END_GAME:
