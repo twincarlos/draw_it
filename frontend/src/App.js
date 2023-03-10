@@ -25,13 +25,13 @@ function App() {
     })
     .then(() => setIsLoaded(true));
 
-    const socket = io('http://localhost:8080');
-    socket.on('game-update', gameId => {
+    const gameSocket = io('http://localhost:8080');
+    gameSocket.on('game-update', gameId => {
       dispatch(sessionActions.restoreUser())
         .then(user => dispatch(gameActions.getOneGame({ gameId, userId: user.id })))
     });
     return () => {
-      socket.disconnect();
+      gameSocket.disconnect();
     };
   }, [dispatch]);
 

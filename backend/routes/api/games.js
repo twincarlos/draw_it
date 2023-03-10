@@ -1,10 +1,5 @@
 const express = require('express');
 const { Game, User, Prompt, Task } = require('../../db/models');
-const io = require('socket.io')(8080, {
-    cors: {
-        origin: ['http://localhost:3000']
-    }
-});
 
 const router = express.Router();
 
@@ -38,10 +33,12 @@ router.put('/join-game', async (req, res) => {
     const game = await Game.findOne({ where: { pin: req.body.pin }, include: [{ model: User }, { model: Prompt, include: [{ model: Task, include: { model: User } }, { model: User }] }] });
     const player = await User.findByPk(req.body.userId);
 
+
     if (game && game.stage === 'Lobby') {
         await player.update({ gameId: game.id });
         await player.save();
 
+        const io = req.app.get('socketio');
         io.emit('game-update', game.id);
 
         return res.json({ game, player });
@@ -58,6 +55,7 @@ router.put('/leave-game', async (req, res) => {
     await player.update({ gameId: null });
     await player.save();
 
+    const io = req.app.get('socketio');
     io.emit('game-update', gameId);
 });
 
@@ -69,8 +67,9 @@ router.put('/kick-out', async (req, res) => {
 
     const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }, { model: Prompt, include: [{ model: Task, include: { model: User } }, { model: User }] }] });
 
+    const io = req.app.get('socketio');
     io.emit('game-update', game.id);
-    io.emit('kick-out', req.body.userId);
+
     return res.json(game);
 });
 
@@ -84,6 +83,8 @@ router.delete('/end-game', async (req, res) => {
     };
 
     await game.destroy();
+
+    const io = req.app.get('socketio');
     io.emit('game-update', req.body.gameId);
 });
 
@@ -99,6 +100,7 @@ router.post('/start-game', async (req, res) => {
     await game.update({ stage: 'Prompt' });
     await game.save();
 
+    const io = req.app.get('socketio');
     io.emit('game-update', req.body.gameId);
 
     return res.json(game);

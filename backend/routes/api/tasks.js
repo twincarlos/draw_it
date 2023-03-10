@@ -1,5 +1,10 @@
 const express = require('express');
 const { Game, User, Prompt, Task } = require('../../db/models');
+const io = require('socket.io')(8080, {
+    cors: {
+        origin: ['http://localhost:3000']
+    }
+});
 
 const router = express.Router();
 
@@ -64,6 +69,8 @@ router.post('/submit-task', async (req, res) => {
         await game.update({ stage });
         await game.save();
     };
+
+    io.emit('game-update', req.body.gameId);
 
     return res.json(game);
 });
