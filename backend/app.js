@@ -6,11 +6,30 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const routes = require('./routes');
 const { ValidationError } = require('sequelize');
+const { Server } = require('socket.io');
+const http = require('http');
 
 const { environment } = require('./config');
 const isProduction = environment === 'production';
 
 const app = express();
+
+const origin = process.env.CORS_ORIGIN;
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin,
+    methods: ['GET', 'POST'],
+  },
+});
+io.listen(8080);
+io.on('game-update', gameId => {
+    io.emit('game-update', gameId);
+});
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
 
 app.use(morgan('dev'));
 app.use(cookieParser());

@@ -38,7 +38,7 @@ router.post('/submit-task', async (req, res) => {
         round: req.body.round
     });
 
-    const game = await Game.findByPk(req.body.gameId);
+    const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }, { model: Prompt, include: [{ model: Task, include: { model: User } }, { model: User }] }] });
     const taskCount = await Task.count({ where: { round: req.body.round } });
     const promptCount = await Prompt.count({ where: { gameId: req.body.gameId } });
     let stage = game.stage;
@@ -65,6 +65,7 @@ router.post('/submit-task', async (req, res) => {
         await game.save();
     };
 
+    req.io.emit('game-update', req.body.gameId);
     return res.json(game);
 });
 

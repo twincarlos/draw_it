@@ -14,21 +14,24 @@ import io from "socket.io-client";
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
-
+  
   useEffect(() => {
     dispatch(sessionActions.restoreUser())
     .then(user => {
       if (user && user.gameId) {
         dispatch(gameActions.getOneGame({ gameId: user.gameId, userId: user.id }))
-          .then(game => (game && (game.stage !== 'Final')) && dispatch(taskActions.getOneTask({ gameId: game.id, userId: user.id, round: game.round })));
+        .then(game => (game && (game.stage !== 'Final')) && dispatch(taskActions.getOneTask({ gameId: game.id, userId: user.id, round: game.round })));
       };
     })
     .then(() => setIsLoaded(true));
-
+    
     const gameSocket = io('http://localhost:8080');
     gameSocket.on('game-update', gameId => {
       dispatch(sessionActions.restoreUser())
-        .then(user => dispatch(gameActions.getOneGame({ gameId, userId: user.id })))
+        .then(user => {
+          dispatch(gameActions.getOneGame({ gameId, userId: user.id }))
+            .then(game => (game.stage !== 'Lobby' && game.stage !== 'Final') && dispatch(taskActions.getOneTask({ gameId: game.id, userId: user.id, round: game.round })));
+        })
     });
     return () => {
       gameSocket.disconnect();
