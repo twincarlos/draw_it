@@ -37,7 +37,8 @@ router.put('/join-game', async (req, res) => {
         await player.update({ gameId: game.id });
         await player.save();
 
-        req.io.emit('game-update', game.id);
+        const io = req.app.get('socketio');
+        io.emit('game-update', game.id);
 
         return res.json({ game, player });
     };
@@ -53,7 +54,8 @@ router.put('/leave-game', async (req, res) => {
     await player.update({ gameId: null });
     await player.save();
 
-    req.io.emit('game-update', gameId);
+    const io = req.app.get('socketio');
+    io.emit('game-update', gameId);
 });
 
 // KICK PLAYER OUT
@@ -64,7 +66,8 @@ router.put('/kick-out', async (req, res) => {
 
     const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }, { model: Prompt, include: [{ model: Task, include: { model: User } }, { model: User }] }] });
 
-    req.io.emit('game-update', game.id);
+    const io = req.app.get('socketio');
+    io.emit('game-update', game.id);
 
     return res.json(game);
 });
@@ -87,7 +90,8 @@ router.delete('/end-game', async (req, res) => {
 
     await game.destroy();
 
-    req.io.emit('game-update', req.body.gameId);
+    const io = req.app.get('socketio');
+    io.emit('game-update', req.body.gameId);
 });
 
 // START GAME
@@ -102,7 +106,8 @@ router.post('/start-game', async (req, res) => {
     await game.update({ stage: 'Prompt' });
     await game.save();
 
-    req.io.emit('game-update', req.body.gameId);
+    const io = req.app.get('socketio');
+    io.emit('game-update', req.body.gameId);
 
     return res.json(game);
 });

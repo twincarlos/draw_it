@@ -16,11 +16,7 @@ export function SocketProvider({ children }) {
 
     useEffect(() => {
         if (sessionUser) {
-            socket.current = io(
-                process.env.NODE_ENV === 'production' ?
-                'https://drawit.onrender.com' :
-                'http://localhost:8080'
-            );
+            socket.current = io();
 
             socket.current.on('game-update', gameId => {
                 dispatch(gameActions.getOneGame({ gameId, userId: sessionUser.id }))
