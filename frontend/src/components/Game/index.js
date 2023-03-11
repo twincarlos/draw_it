@@ -33,9 +33,22 @@ function Game() {
         return <Redirect to='/' />;
     };
 
+    function gameCounter() {
+        let counter = 0;
+        for (let prompt of game.Prompts) {
+            for (let task of prompt.Tasks) {
+                if (task.round === game.round) {
+                    counter++;
+                };
+            };
+        };
+        return counter;
+    };
+
     return (
         <div className='main game'>
             { sessionUser.isHost && <button onClick={endGame}>End Game</button> }
+            { game.stage !== 'Lobby' && game.stage !== 'Final' && <p>{gameCounter()} of {game.Users.length}</p> }
             { stages[game.stage] }
         </div>
     );
