@@ -15,14 +15,14 @@ module.exports = {
         username: 'Demo1',
         hashedPassword: bcrypt.hashSync('password'),
         profilePicture: 'https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_1280.png',
-        gameId: 1,
-        isHost: true
+        gameId: null,
+        isHost: false
       },
       {
         username: 'Demo2',
         hashedPassword: bcrypt.hashSync('password'),
         profilePicture: 'https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_1280.png',
-        gameId: 1,
+        gameId: null,
         isHost: false
       },
       {
