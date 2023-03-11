@@ -11,7 +11,11 @@ export default function Final({ game }) {
                         {
                             prompt.Tasks.map(task => (
                                 <div key={task.id}>
-                                    <p>{task.User.username}: {task.task} type: {task.type}</p>
+                                    {
+                                        task.type === 'Draw' ?
+                                        <img alt="" src={task.task} /> :
+                                        <p>{ task.task }</p>
+                                    }
                                 </div>
                             ))
                         }
