@@ -11,6 +11,7 @@ export default function Draw({ sessionUser, game, task }) {
     if (!task) return null;
 
     function submitTask() {
+        console.log('SUBMITTED');
         dispatch(taskActions.submitNewTask({
             promptId: task.promptId,
             gameId: game.id,
@@ -29,8 +30,8 @@ export default function Draw({ sessionUser, game, task }) {
                     return LZString.decompressFromUTF16(promptTask.task);
                 };
             };
-            return false;
         };
+        return false;
     })();
 
     return (

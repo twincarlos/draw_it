@@ -71,7 +71,14 @@ router.put('/kick-out', async (req, res) => {
 
 // END GAME
 router.delete('/end-game', async (req, res) => {
-    const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }] });
+    const game = await Game.findByPk(req.body.gameId, { include: [{ model: User }, { model: Prompt, include: { model: Task } }] });
+
+    for (let prompt of game.Prompts) {
+        for (let task of prompt.Tasks) {
+            await task.destroy();
+        };
+        await prompt.destroy();
+    };
 
     for (let player of game.Users) {
         await player.update({ gameId: null, isHost: false });

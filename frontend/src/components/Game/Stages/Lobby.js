@@ -4,10 +4,6 @@ import * as gameActions from "../../../store/thunks/game";
 export default function Lobby({ game, sessionUser }) {
     const dispatch = useDispatch();
 
-    function endGame() {
-        dispatch(gameActions.endOneGame({ gameId: game.id, userId: sessionUser.id }));
-    };
-
     function leaveGame() {
         dispatch(gameActions.leaveOneGame(sessionUser.id));
     };
@@ -22,11 +18,7 @@ export default function Lobby({ game, sessionUser }) {
 
     return (
         <div className='main lobby'>
-            {
-                sessionUser.isHost ?
-                <button onClick={endGame}>End Game</button> :
-                <button onClick={leaveGame}>Leave Game</button>
-            }
+            { !sessionUser.isHost && <button onClick={leaveGame}>Leave Game</button> }
             <h1>Game {game.pin}</h1>
             <div style={{ display: 'flex', gap: 50 }}>
                 {

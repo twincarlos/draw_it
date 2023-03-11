@@ -38,6 +38,7 @@ const sessionReducer = (state = initialState, action) => {
       newState.game = null;
       newState.user.gameId = null;
       newState.user.isHost = false;
+      newState.task = null;
       return { ...newState };
 
     case taskThunks.GET_TASK:

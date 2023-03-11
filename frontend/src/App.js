@@ -20,7 +20,7 @@ function App() {
     .then(user => {
       if (user && user.gameId) {
         dispatch(gameActions.getOneGame({ gameId: user.gameId, userId: user.id }))
-        .then(game => (game && (game.stage !== 'Final')) && dispatch(taskActions.getOneTask({ gameId: game.id, userId: user.id, round: game.round })));
+        .then(game => (game && (game.stage !== 'Final' && game.stage !== 'Lobby')) && dispatch(taskActions.getOneTask({ gameId: game.id, userId: user.id, round: game.round })));
       };
     })
     .then(() => setIsLoaded(true));
@@ -30,7 +30,7 @@ function App() {
       dispatch(sessionActions.restoreUser())
         .then(user => {
           dispatch(gameActions.getOneGame({ gameId, userId: user.id }))
-            .then(game => (game.stage !== 'Lobby' && game.stage !== 'Final') && dispatch(taskActions.getOneTask({ gameId: game.id, userId: user.id, round: game.round })));
+            .then(game => (game && (game.stage !== 'Final' && game.stage !== 'Lobby')) && dispatch(taskActions.getOneTask({ gameId: game.id, userId: user.id, round: game.round })));
         })
     });
     return () => {
