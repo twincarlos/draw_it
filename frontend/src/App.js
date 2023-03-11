@@ -9,12 +9,11 @@ import * as taskActions from "./store/thunks/task";
 import Navigation from "./components/Navigation";
 import Splash from "./components/Splash";
 import Game from "./components/Game";
-import io from "socket.io-client";
 
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
-  
+
   useEffect(() => {
     dispatch(sessionActions.restoreUser())
     .then(user => {
@@ -24,18 +23,6 @@ function App() {
       };
     })
     .then(() => setIsLoaded(true));
-    
-    const gameSocket = io('http://localhost:8080');
-    gameSocket.on('game-update', gameId => {
-      dispatch(sessionActions.restoreUser())
-        .then(user => {
-          dispatch(gameActions.getOneGame({ gameId, userId: user.id }))
-            .then(game => (game && (game.stage !== 'Final' && game.stage !== 'Lobby')) && dispatch(taskActions.getOneTask({ gameId: game.id, userId: user.id, round: game.round })));
-        })
-    });
-    return () => {
-      gameSocket.disconnect();
-    };
   }, [dispatch]);
 
   return (
