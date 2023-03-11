@@ -27,7 +27,7 @@ module.exports = {
       },
       task: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       type: {
         allowNull: false,

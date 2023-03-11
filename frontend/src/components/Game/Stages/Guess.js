@@ -5,7 +5,7 @@ import * as taskActions from "../../../store/thunks/task";
 export default function Guess({ sessionUser, game, task }) {
     const dispatch = useDispatch();
     const [newTask, setNewTask] = useState('');
-
+    
     if (!task) return null;
 
     function submitTask() {
@@ -23,7 +23,8 @@ export default function Guess({ sessionUser, game, task }) {
     return (
         <div className="main guess">
             <h1>Round {game.round}:</h1>
-            <h1>It's your turn to guess: {task.task}</h1>
+            <h1>It's your turn to guess:</h1>
+            <img alt="" src={task.task} />
             <input type='text' onChange={e => setNewTask(e.target.value)}></input>
             <button onClick={submitTask}>Submit</button>
         </div>
