@@ -15,7 +15,7 @@ export default function Final({ game }) {
                                 <div key={task.id}>
                                     {
                                         task.type === 'Draw' ?
-                                        <img alt="" src={LZString.decompressFromUTF16(task.task)} /> :
+                                        <img alt="" src={LZString.decompress(task.task)} /> :
                                         <p>{ task.task }</p>
                                     }
                                 </div>

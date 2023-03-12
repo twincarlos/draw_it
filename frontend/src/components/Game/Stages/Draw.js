@@ -15,7 +15,7 @@ export default function Draw({ sessionUser, game, task }) {
             promptId: task.promptId,
             gameId: game.id,
             userId: sessionUser.id,
-            task: LZString.compressToUTF16(canvasRef.current.getDataURL()),
+            task: LZString.compress(canvasRef.current.getDataURL()),
             type: 'Draw',
             round: game.round
         }))
@@ -26,7 +26,7 @@ export default function Draw({ sessionUser, game, task }) {
         for (let prompt of game.Prompts) {
             for (let promptTask of prompt.Tasks) {
                 if (promptTask.round === game.round && promptTask.User.id === sessionUser.id) {
-                    return LZString.decompressFromUTF16(promptTask.task);
+                    return LZString.decompress(promptTask.task);
                 };
             };
         };
