@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import * as taskActions from '../../../store/thunks/task';
+import * as taskActions from '../../../../store/thunks/task';
 
 export default function Prompt({ sessionUser, game }) {
     const dispatch = useDispatch();

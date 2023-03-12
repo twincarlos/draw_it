@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import * as taskActions from "../../../store/thunks/task";
+import * as taskActions from "../../../../store/thunks/task";
 import CanvasDraw from "react-canvas-draw";
-import LZString from "../../../lz-string";
+import LZString from "../../../../lz-string";
 
 export default function Draw({ sessionUser, game, task }) {
     const dispatch = useDispatch();

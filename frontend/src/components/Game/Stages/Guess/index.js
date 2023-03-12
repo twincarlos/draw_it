@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import * as taskActions from "../../../store/thunks/task";
-import LZString from "../../../lz-string";
+import * as taskActions from "../../../../store/thunks/task";
+import LZString from "../../../../lz-string";
 
 export default function Guess({ sessionUser, game, task }) {
     const dispatch = useDispatch();

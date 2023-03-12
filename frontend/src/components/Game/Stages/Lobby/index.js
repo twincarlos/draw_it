@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
-import * as gameActions from "../../../store/thunks/game";
+import * as gameActions from "../../../../store/thunks/game";
+import './Lobby.css';
 
 export default function Lobby({ game, sessionUser }) {
     const dispatch = useDispatch();
@@ -19,11 +20,14 @@ export default function Lobby({ game, sessionUser }) {
     return (
         <div className='main lobby'>
             { !sessionUser.isHost && <button onClick={leaveGame}>Leave Game</button> }
-            <h1>Game {game.pin}</h1>
-            <div style={{ display: 'flex', gap: 50 }}>
+            <div className="game-pin">
+                <h1>{game.pin}</h1>
+                <p>Send this PIN to your friends so they can join!</p>
+            </div>
+            <div style={{ display: 'flex', gap: 50 }} className='users'>
                 {
                     game.Users.map(user => (
-                        <div key={user.id} style={{ border: user.isHost && '1px solid red' }}>
+                        <div key={user.id} className='user'>
                             <img src={user.profilePicture} alt='' style={{ width: 50 }}/>
                             <p>{user.username}</p>
                             { sessionUser.isHost && sessionUser.id !== user.id && <button onClick={() => kickOut(user.id)}>Kick Out</button> }

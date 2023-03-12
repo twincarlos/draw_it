@@ -1,4 +1,4 @@
-import LZString from "../../../lz-string";
+import LZString from "../../../../lz-string";
 
 export default function Final({ game }) {
 
