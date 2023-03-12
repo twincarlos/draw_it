@@ -65,7 +65,9 @@ router.post('/submit-task', async (req, res) => {
         await game.save();
     };
 
-    req.io.emit('game-update', req.body.gameId);
+    const io = req.app.get('socketio');
+    io.emit('game-update', req.body.gameId);
+
     return res.json(game);
 });
 

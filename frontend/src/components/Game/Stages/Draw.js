@@ -11,7 +11,6 @@ export default function Draw({ sessionUser, game, task }) {
     if (!task) return null;
 
     function submitTask() {
-        console.log('SUBMITTED');
         dispatch(taskActions.submitNewTask({
             promptId: task.promptId,
             gameId: game.id,
@@ -26,7 +25,7 @@ export default function Draw({ sessionUser, game, task }) {
     const hasSubmitted = (function () {
         for (let prompt of game.Prompts) {
             for (let promptTask of prompt.Tasks) {
-                if (promptTask.round === game.round && promptTask.userId === sessionUser.id) {
+                if (promptTask.round === game.round && promptTask.User.id === sessionUser.id) {
                     return LZString.decompressFromUTF16(promptTask.task);
                 };
             };
