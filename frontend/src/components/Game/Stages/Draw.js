@@ -38,7 +38,8 @@ export default function Draw({ sessionUser, game, task }) {
     return (
         <div className="main draw" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
             <h1>Round {game.round}:</h1>
-            <h1>It's your turn to draw: {task.task}</h1>
+            <h2>It's your turn to draw:</h2>
+            <h1>{task.task}</h1>
             {
                 hasSubmitted ?
                 <img alt="" src={hasSubmitted}/> :

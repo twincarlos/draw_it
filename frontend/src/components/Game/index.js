@@ -48,7 +48,8 @@ function Game() {
     return (
         <div className='main game'>
             { sessionUser.isHost && <button onClick={endGame}>End Game</button> }
-            { game.stage !== 'Lobby' && game.stage !== 'Final' && <p>{gameCounter()} of {game.Users.length}</p> }
+            { game.stage !== 'Lobby' && game.stage !== 'Final' && <h2>{gameCounter()} / {game.Users.length}</h2> }
+            <p>Write a random prompt to draw</p>
             { stages[game.stage] }
         </div>
     );
