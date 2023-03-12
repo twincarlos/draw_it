@@ -20,9 +20,6 @@ const onConnection = (socket) => {
     socket.on('game-update', gameId => {
         io.emit('game-update', gameId);
     });
-    socket.on('disconnect', () => {
-        console.log('User disconnect');
-    });
 };
 
 module.exports = { server, io, onConnection };

@@ -1,13 +1,20 @@
 /* TODO Add site wide styles */
 body {
-    position: absolute;
+    margin: 0;
     width: 100vw;
     height: 100vh;
-    top: 0;
-    left: 0;
-    background-color: grey;
+    background: linear-gradient(200deg, rgba(92, 30, 166, 1) 0%, rgba(200, 67, 94, 1) 100%);
+    overflow: hidden;
+    text-align: center;
 }
 
 * {
     font-family: sans-serif;
+    text-decoration: none;
+    list-style-type: none;
+}
+
+.main {
+    width: 100vw;
+    height: 100vh;
 }

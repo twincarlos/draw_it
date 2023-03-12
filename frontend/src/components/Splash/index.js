@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import * as gameActions from '../../store/thunks/game';
+import './Splash.css';
 
 function Splash() {
     const dispatch = useDispatch();
@@ -22,18 +23,25 @@ function Splash() {
         dispatch(gameActions.createNewGame(sessionUser.id))
     };
 
-    async function joinGame() {
+    async function joinGame(e) {
+        e.preventDefault();
         await dispatch(gameActions.joinOneGame({ pin: gamePin, userId: sessionUser.id }))
             .then(res => !(res.game) && setError('Game not found.'));
     };
 
     return (
         <div className='splash main'>
-            <h1>Draw It!</h1>
-            { error && <p>{error}</p> }
-            <input type='text' onChange={e => setGamePin(e.target.value)}></input>
-            <button onClick={joinGame}>JOIN GAME</button>
-            <button onClick={createGame}>CREATE GAME</button>
+            <img src='https://garticphone.com/images/gartic.svg' alt='' />
+            <div>
+                { error && <p>{error}</p> }
+                <form onSubmit={e => joinGame(e)}>
+                    <input placeholder='Enter game PIN' type='text' onChange={e => setGamePin(e.target.value)}></input>
+                    <button></button>
+                </form>
+            </div>
+            <div>
+                <button onClick={createGame}>Create game</button>
+            </div>
         </div>
     );
 };
