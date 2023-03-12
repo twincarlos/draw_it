@@ -11,7 +11,7 @@ export default function Final({ game }) {
                     <div key={prompt.id}>
                         <h2>{prompt.User.username}:</h2>
                         {
-                            prompt.Tasks.map(task => (
+                            prompt.Tasks.sort((a, b) => a.round - b.round).map(task => (
                                 <div key={task.id} style={{ backgroundColor: 'lightgray', padding: 2, border: '1px solid black' }}>
                                     {
                                         task.type === 'Draw' ?

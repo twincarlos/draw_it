@@ -30,6 +30,7 @@ export default function Prompt({ sessionUser, game }) {
 
     return (
         <div className="main prompt">
+            <p>Write a random prompt to draw</p>
             <input type='text' onChange={e => setNewTask(e.target.value)} value={hasSubmitted ? hasSubmitted : newTask}></input>
             <button onClick={submitTask} disabled={hasSubmitted ? true : false}>Submit</button>
         </div>
