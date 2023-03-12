@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import * as taskActions from "../../../store/thunks/task";
 import CanvasDraw from "react-canvas-draw";
@@ -7,6 +7,8 @@ import LZString from "../../../lz-string";
 export default function Draw({ sessionUser, game, task }) {
     const dispatch = useDispatch();
     const canvasRef = useRef(null);
+    const [brushRadius, setBrushRadius] = useState(5);
+    const [brushColor, setBrushColor] = useState("#444");
 
     if (!task) return null;
 
@@ -34,7 +36,7 @@ export default function Draw({ sessionUser, game, task }) {
     })();
 
     return (
-        <div className="main draw">
+        <div className="main draw" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
             <h1>Round {game.round}:</h1>
             <h1>It's your turn to draw: {task.task}</h1>
             {
@@ -43,10 +45,22 @@ export default function Draw({ sessionUser, game, task }) {
                 <CanvasDraw
                 lazyRadius={0}
                 hideGrid={true}
+                canvasWidth={window.innerWidth / 100 * 90}
+                canvasHeight={window.innerHeight / 100 * 60}
                 ref={canvasRef}
+                brushRadius={brushRadius}
+                brushColor={brushColor}
                 />
 
             }
+            <div style={{ display: 'flex' }}>
+                <p>Line weight:</p>
+                <input type='range' min={1} max={30} onChange={e => setBrushRadius(e.target.value)}></input>
+            </div>
+            <div style={{ display: 'flex' }}>
+                <p>Line color:</p>
+                <input type='color' onChange={e => setBrushColor(e.target.value)}></input>
+            </div>
             <button onClick={submitTask} disabled={hasSubmitted ? true : false}>Submit</button>
         </div>
     );

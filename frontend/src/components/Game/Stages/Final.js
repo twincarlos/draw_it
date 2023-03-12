@@ -9,14 +9,17 @@ export default function Final({ game }) {
             {
                 game.Prompts.map(prompt => (
                     <div key={prompt.id}>
-                        <p>{prompt.User.username}:</p>
+                        <h2>{prompt.User.username}:</h2>
                         {
                             prompt.Tasks.map(task => (
-                                <div key={task.id}>
+                                <div key={task.id} style={{ backgroundColor: 'lightgray', padding: 2, border: '1px solid black' }}>
                                     {
                                         task.type === 'Draw' ?
-                                        <img alt="" src={LZString.decompressFromBase64(task.task)} /> :
-                                        <p>{ task.task }</p>
+                                        <div>
+                                            <p><b>{task.User.username}:</b></p>
+                                            <img alt="" src={LZString.decompressFromBase64(task.task)} /> 
+                                        </div> :
+                                        <p><b>{task.User.username}: </b>{ task.task }</p>
                                     }
                                 </div>
                             ))
