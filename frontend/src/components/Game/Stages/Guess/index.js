@@ -38,7 +38,7 @@ export default function Guess({ sessionUser, game, task }) {
             <h1>It's your turn to guess:</h1>
             <img alt="" src={LZString.decompressFromBase64(task.task)} />
             <input type='text' onChange={e => setNewTask(e.target.value)} value={hasSubmitted ? hasSubmitted : newTask}></input>
-            <button onClick={submitTask} disabled={hasSubmitted ? true : false}>Submit</button>
+            <button onClick={submitTask} className={hasSubmitted && 'disabled'} disabled={hasSubmitted ? true : false}>Submit</button>
         </div>
     );
 };

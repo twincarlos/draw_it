@@ -1,6 +1,12 @@
-.game > button {
-    width: 10vw;
-    height: 3vh;
+.game-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    background-color: rgba(80, 24, 81, .25);
+}
+
+.game-header > button {
     font-size: .5rem;
     outline: none;
     border: none;
@@ -8,4 +14,14 @@
     color: #301A6B;
     box-shadow: 0px 3px 0px 0px #301a6b;
     border-radius: 4px;
+}
+
+.game-update {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 600;
+    gap: 1rem;
+    color: rgba(255, 255, 255, .8);
 }

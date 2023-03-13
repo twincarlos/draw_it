@@ -1,0 +1,7 @@
+.draw-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    background-color: rgba(233, 195, 234, 0.25);
+}

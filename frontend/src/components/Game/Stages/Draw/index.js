@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import * as taskActions from "../../../../store/thunks/task";
 import CanvasDraw from "react-canvas-draw";
 import LZString from "../../../../lz-string";
+import './Draw.css';
 
 export default function Draw({ sessionUser, game, task }) {
     const dispatch = useDispatch();
@@ -36,10 +37,11 @@ export default function Draw({ sessionUser, game, task }) {
     })();
 
     return (
-        <div className="main draw" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
-            <h1>Round {game.round}:</h1>
-            <h2>It's your turn to draw:</h2>
-            <h1>{task.task}</h1>
+        <div className="main draw">
+            <div className="draw-header">
+                <p>Hey, it's time to draw!</p>
+                <h1>{task.task}</h1>
+            </div>
             {
                 hasSubmitted ?
                 <img alt="" src={hasSubmitted}/> :
@@ -62,7 +64,7 @@ export default function Draw({ sessionUser, game, task }) {
                 <p>Line color:</p>
                 <input type='color' onChange={e => setBrushColor(e.target.value)}></input>
             </div>
-            <button onClick={submitTask} disabled={hasSubmitted ? true : false}>Submit</button>
+            <button onClick={submitTask} className={hasSubmitted && 'disabled'} disabled={hasSubmitted ? true : false}>Submit</button>
         </div>
     );
 };

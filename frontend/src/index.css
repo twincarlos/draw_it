@@ -3,9 +3,15 @@ body {
     margin: 0;
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(200deg, rgba(92, 30, 166, 1) 0%, rgba(200, 67, 94, 1) 100%);
+    background: linear-gradient(
+        200deg, rgba(92, 30, 166, 1)
+        0%, rgba(200, 67, 94, 1)
+        100%
+    );
     overflow-x: hidden;
     text-align: center;
+    width: 100vw;
+    height: 100vh;
 }
 
 * {
@@ -14,11 +20,10 @@ body {
     list-style-type: none;
 }
 
-.main {
-    width: 100vw;
-    height: 100vh;
-}
-
 button {
     cursor: pointer;
+}
+
+button.disabled {
+    cursor: default;
 }

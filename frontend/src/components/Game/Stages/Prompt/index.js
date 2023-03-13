@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import * as taskActions from '../../../../store/thunks/task';
+import './Prompt.css';
 
 export default function Prompt({ sessionUser, game }) {
     const dispatch = useDispatch();
     const [newTask, setNewTask] = useState('');
 
-    function submitTask() {
+    function submitTask(e) {
+        e.preventDefault();
         dispatch(taskActions.submitNewTask({
             gameId: game.id,
             userId: sessionUser.id,
@@ -31,8 +33,10 @@ export default function Prompt({ sessionUser, game }) {
     return (
         <div className="main prompt">
             <p>Write a random prompt to draw</p>
-            <input type='text' onChange={e => setNewTask(e.target.value)} value={hasSubmitted ? hasSubmitted : newTask}></input>
-            <button onClick={submitTask} disabled={hasSubmitted ? true : false}>Submit</button>
+            <form onSubmit={e => submitTask(e)}>
+                <input type='text' onChange={e => setNewTask(e.target.value)} value={hasSubmitted ? hasSubmitted : newTask}></input>
+                <button onClick={submitTask} className={hasSubmitted && 'disabled'} disabled={hasSubmitted ? true : false}>Submit</button>
+            </form>
         </div>
     );
 };

@@ -34,7 +34,7 @@ function Game() {
         return <Redirect to='/' />;
     };
 
-    function gameCounter() {
+    const gameCounter = (function() {
         let counter = 0;
         for (let prompt of game.Prompts) {
             for (let task of prompt.Tasks) {
@@ -44,12 +44,20 @@ function Game() {
             };
         };
         return counter;
-    };
+    })();
 
     return (
         <div className='main game'>
-            { sessionUser.isHost && <button onClick={endGame}>End Game</button> }
-            { game.stage !== 'Lobby' && game.stage !== 'Final' && <h2>{gameCounter()} / {game.Users.length}</h2> }
+            <div className='game-header'>
+                { sessionUser.isHost && <button onClick={endGame}>End Game</button> }
+                {
+                    game.stage !== 'Lobby' && game.stage !== 'Final' &&
+                    <div className='game-update'>
+                        <p>Round: { game.round } / {game.Prompts.length}</p>
+                        <p>{gameCounter} / {game.Prompts.length}</p>
+                    </div>
+                }
+            </div>
             { stages[game.stage] }
         </div>
     );
