@@ -6,6 +6,7 @@ import Draw from './Stages/Draw';
 import Guess from './Stages/Guess';
 import Final from './Stages/Final';
 import * as gameActions from "../../store/thunks/game";
+import './Game.css';
 
 function Game() {
     const sessionUser = useSelector(state => state.session.user);
